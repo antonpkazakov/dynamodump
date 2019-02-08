@@ -125,7 +125,7 @@ function exportSchemaCli(cli) {
 function exportAllSchemaCli(cli) {
   const region = cli.flags.region;
   const endpoint = cli.flags.endpoint;
-  return bluebird.map(listTables(region), tableName => {
+  return bluebird.map(listTables(region, endpoint), tableName => {
     console.error(`Exporting ${tableName}`);
     return exportSchema(tableName, null, region, endpoint);
   }, { concurrency: 1 });
@@ -356,7 +356,8 @@ function exportDataCli(cli) {
 
 function exportAllDataCli(cli) {
   const region = cli.flags.region;
-  return bluebird.map(listTables(region), tableName => {
+  const endpoint = cli.flags.endpoint;
+  return bluebird.map(listTables(region, endpoint), tableName => {
     console.error(`Exporting ${tableName}`);
     return exportData(tableName, null, region, endpoint);
   }, { concurrency: 1 });
@@ -399,7 +400,7 @@ function exportData(tableName, file, region, endpoint) {
 function exportAllCli(cli) {
   const region = cli.flags.region;
   const endpoint = cli.flags.endpoint;
-  return bluebird.map(listTables(region), tableName => {
+  return bluebird.map(listTables(region, endpoint), tableName => {
     console.error(`Exporting ${tableName}`);
     return exportSchema(tableName, null, region, endpoint)
       .then(() => exportData(tableName, null, region, endpoint))
